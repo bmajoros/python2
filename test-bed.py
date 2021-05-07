@@ -26,8 +26,10 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from BedReader import BedReader
+
 BASE="/Users/bmajoros/python/test/data"
 filename=BASE+"/DEGs_downreg.FDR_0.1.TSS.protein_coding.bed"
+
 reader=BedReader(filename)
 while(True):
     rec=reader.nextRecord()

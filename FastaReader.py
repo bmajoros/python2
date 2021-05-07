@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 import re
+
 #=========================================================================
 # Attributes:
 #   fh : file handle
@@ -53,16 +54,21 @@ class FastaReader:
         self.save=None
         if(filename is not None):
             self.fh=open(filename,"r")
+
     @classmethod
     def readerFromFileHandle(cls,fh):
         reader=FastaReader()
         reader.fh=fh
+
     def close(self):
         self.fh.close()
+
     def dontUppercase(self):
         self.shouldUppercase=False
+
     def doUppercase(self):
         self.shouldUppercase=True
+
     def nextSequence(self):
         defline=""
         seq=""
@@ -88,6 +94,7 @@ class FastaReader:
                     if(self.shouldUppercase): seq+=line.upper()
                     else: seq+=line
                 return [defline,seq]
+
     @classmethod
     def getSize(cls,filename):
         reader=FastaReader(filename)
@@ -98,12 +105,14 @@ class FastaReader:
             size+=len(seq)
         reader.close()
         return size
+
     @classmethod
     def firstSequence(cls,filename):
         reader=FastaReader(filename)
         [defline,seq]=reader.nextSequence()
         reader.close()
         return [defline,seq]
+
     @classmethod
     def countEntries(cls,filename):
         n=0
@@ -113,6 +122,7 @@ class FastaReader:
             if(not defline): break
             n+=1
         return n
+
     @classmethod
     def readAll(cls,filename):
         hash={}
@@ -128,6 +138,7 @@ class FastaReader:
             hash[id]=seq
         reader.close()
         return hash
+
     @classmethod
     def readAllIntoArray(cls,filename):
         array=[]
@@ -138,6 +149,7 @@ class FastaReader:
             array.append([defline,seq])
         reader.close()
         return array
+
     @classmethod
     def readAllAndKeepDefs(cls,filename):
         hash={}
@@ -151,6 +163,7 @@ class FastaReader:
             hash[id]=[defline,seq]
         reader.close()
         return hash
+    
     @classmethod
     def parseDefline(cls,defline):
         match=re.search("^\s*>\s*(\S+)(.*)",defline)

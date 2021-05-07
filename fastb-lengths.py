@@ -28,9 +28,11 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 from Fastb import Fastb
 import ProgramName
 import sys
+
 if(len(sys.argv)!=2):
     sys.exit(ProgramName.get()+" in.fastb")
 filename=sys.argv[1]
+
 fastb=Fastb(filename)
 numTracks=fastb.numTracks()
 for i in range(numTracks):

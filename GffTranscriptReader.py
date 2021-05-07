@@ -32,6 +32,7 @@ from Gene import Gene
 from Integer import Integer
 from Rex import Rex
 import re
+
 ######################################################################
 # Returns a list of Transcripts.  For each transcript, the Exons
 # will be sorted according to order of translation, so that
@@ -59,11 +60,13 @@ import re
 #   hashTable=reader.loadGeneIdHash(filename)
 #   reader.doNotSortTranscripts()
 ######################################################################
+
 class GffTranscriptReader:
     def __init__(self):
         self.shouldSortTranscripts=True
         self.exonsAreCDS=False
         self.stopCodons={"TAG":1,"TAA":1,"TGA":1}
+
     def loadGenes(self,filename):
         transcripts=self.loadGFF(filename)
         genes=set()
@@ -76,8 +79,10 @@ class GffTranscriptReader:
         genes=list(genes)
         genes.sort(key=lambda gene: gene.getBegin())
         return genes
+
     def doNotSortTranscripts(self):
         self.shouldSortTranscripts=False
+
     def loadTranscriptIdHash(self,filename):
         transcriptArray=self.loadGFF(filename)
         hash={}
@@ -85,6 +90,7 @@ class GffTranscriptReader:
             id=transcript.getID()
             hash[id]=transcript
         return hash
+
     def loadGeneIdHash(self,filename):
         transcriptArray=self.loadGFF(filename)
         hash={}
@@ -94,10 +100,12 @@ class GffTranscriptReader:
             if(array is None): array=hash[id]=[]
             array.append(transcript)
         return hash
+
     def hashBySubstrate(self,filename):
         hash={}
         self.hashBySubstrateInto(filename,hash)
         return hash
+
     def hashBySubstrateInto(self,filename,hash):
         transcriptArray=self.loadGFF(filename)
         for transcript in transcriptArray:
@@ -105,6 +113,7 @@ class GffTranscriptReader:
             array=hash.get(id,None)
             if(array is None): array=hash[id]=[]
             array.append(transcript)
+
     def hashGenesBySubstrate(self,filename):
         geneArray=self.loadGenes(filename)
         hash={}
@@ -114,6 +123,7 @@ class GffTranscriptReader:
             if(array is None): array=hash[id]=[]
             array.append(gene)
         return hash
+
     def computeFrames(self,transcripts):
         for transcript in transcripts:
             if(not transcript.areExonTypesSet()): transcript.setExonTypes()
@@ -124,12 +134,15 @@ class GffTranscriptReader:
                 exon.frame=frame
                 length=exon.getLength()
                 frame=(frame+length)%3 # this is fine, on both strands
+
     def exonContainsPoint(self,exon,point):
         return point>=exon.begin and point<=exon.end;
         # this '<=' is necessary for the minus strand!
         # do not change it back to '<' !!!
+
     def setStopCodons(self,stopCodons):
         self.stopCodons=stopCodons
+
     def adjustStartCodons_fw(self,transcript,totalIntronSize):
         startCodon=None
         exons=transcript.exons
@@ -158,6 +171,7 @@ class GffTranscriptReader:
             if(transcript.startCodon is not None and 
                self.exonContainsPoint(exon,transcript.startCodon)): break
         return startCodon
+
     def adjustStartCodons_bw(self,transcript,totalIntronSize):
         startCodon=None
         exons=transcript.exons
@@ -182,6 +196,7 @@ class GffTranscriptReader:
             if(transcript.startCodon is not None and
                self.exonContainsPoint(exon,transcript.startCodon)): break
         return startCodon
+        
     def adjustStartCodons(self,transcripts):
         for transcript in transcripts:
             transcript.sortExons()
@@ -198,6 +213,7 @@ class GffTranscriptReader:
             if(startCodon is not None):
                 startCodon-=int(totalIntronSize)
                 transcript.startCodon=startCodon
+
     def loadGFF_transcript(self,fields,line,transcriptBeginEnd,GFF,
                            transcripts,readOrder,genes):
         begin=int(fields[3])-1
@@ -235,6 +251,7 @@ class GffTranscriptReader:
             transcript.setGene(gene)
             gene.addTranscript(transcript)
             transcript.extraFields=transcriptExtraFields
+                           
     def loadGFF_UTR(self,fields,line,transcriptBeginEnd,GFF,
                            transcripts,readOrder,genes):
         exonBegin=int(fields[3])-1
@@ -294,6 +311,7 @@ class GffTranscriptReader:
             exon.type=fields[2]
             transcript.UTR.append(exon) # OK -- we sort later
         gene.addTranscript(transcript)
+
     def loadGFF_exon(self,fields,line,transcriptBeginEnd,GFF,
                            transcripts,readOrder,genes):
         exonBegin=int(fields[3])-1
@@ -345,6 +363,7 @@ class GffTranscriptReader:
         if(transcript.rawExons is None): transcript.rawExons=[]
         transcript.rawExons.append(exon)
         gene.addTranscript(transcript)
+        
     def loadGFF_CDS(self,fields,line,transcriptBeginEnd,GFF,
                     transcripts,readOrder,genes):
         exonBegin=int(fields[3])-1
@@ -399,6 +418,7 @@ class GffTranscriptReader:
             exon.type=fields[2]
             transcript.exons.append(exon) # OK -- we sort later
         gene.addTranscript(transcript)
+
     def loadGFF(self,gffFilename):
         transcripts={}
         genes={}
@@ -439,3 +459,4 @@ class GffTranscriptReader:
         else:
             transcripts.sort(key=lambda t: t.readOrder)
         return transcripts
+

@@ -27,6 +27,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 from Bed3Record import Bed3Record
 from Bed6Record import Bed6Record
 import re
+
 #=========================================================================
 # Attributes:
 #   fh : file handle
@@ -43,6 +44,7 @@ class BedReader:
     """BedReader reads bed3 and/or bed6 files"""
     def __init__(self,filename):
         self.fh=open(filename,"r")
+
     @classmethod
     def readAll(cls,filename):
         reader=BedReader(filename)
@@ -53,6 +55,7 @@ class BedReader:
             array.append(record)
         reader.close()
         return array
+
     @classmethod
     def hashBySubstrate(cls,filename):
         list=cls.readAll(filename)
@@ -62,8 +65,10 @@ class BedReader:
                 hash[rec.chr]=[]
             hash[rec.chr].append(rec)
         return hash
+
     def close(self):
         self.fh.close()
+
     def nextRecord(self):
         while(True):
             line=self.fh.readline()
@@ -85,3 +90,4 @@ class BedReader:
                 return Bed6Record(fields[0],int(fields[1]),int(fields[2]),
                                   fields[3],float(fields[4]),fields[5])
             raise Exception("wrong number of fields in bed file: "+line)
+

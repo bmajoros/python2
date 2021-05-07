@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 import os
+
 #=========================================================================
 # Attributes:
 #   commands : array of string
@@ -50,16 +51,22 @@ class SlurmWriter:
         self.memValue=0
         self.threadsValue=0
         self.queue=None
+
     def addCommand(self,cmd):
         self.commands.append(cmd)
+
     def nice(self,value=100):
         self.niceValue=value
+
     def mem(self,value):
         self.memValue=value
+
     def threads(self,value):
         self.threadsValue=value
+        
     def setQueue(self,value):
         self.queue=value
+
     def writeArrayScript(self,slurmDir,jobName,maxParallel,moreSBATCH=""):
         if(moreSBATCH is None): moreSBATCH=""
         if(int(maxParallel)<1): raise Exception("specify maxParallel parameter")
@@ -131,3 +138,13 @@ class SlurmWriter:
                      queue+moreSBATCH+"#",
                      command
                      ]))
+
+
+
+
+
+
+
+
+
+

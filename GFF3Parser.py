@@ -29,6 +29,7 @@ from Gene import Gene
 from Transcript import Transcript
 from Exon import Exon
 import re
+
 #=========================================================================
 # Attributes:
 #   
@@ -50,18 +51,21 @@ class GFF3Parser:
     """GFF3Parser"""
     def __init__(self):
         pass
+
     def loadTranscriptIdHash(self,filename):
         transcripts=self.loadGFF(filename)
         hash={}
         for transcript in transcripts:
             hash[transcript.getID()]=transcript
         return hash
+
     def loadGeneIdHash(self,filename):
         genes=self.loadGenes(filename)
         hash={}
         for gene in genes:
             hash[gene.getID()]=gene
         return hash
+
     def hashGenesBySubstrate(self,filename):
         genes=self.loadGenes(filename)
         hash={}
@@ -71,6 +75,7 @@ class GFF3Parser:
             if(array is None): array=hash[substrate]=[]
             array.append(gene)
         return hash
+            
     def hashBySubstrate(self,filename):
         transcripts=self.loadGFF(filename)
         hash={}
@@ -80,6 +85,7 @@ class GFF3Parser:
             if(array is None): array=hash[substrate]=[]
             array.append(transcript)
         return hash
+            
     def loadGFF(self,filename):
         genes=self.loadGenes(filename)
         transcripts=[]
@@ -89,6 +95,7 @@ class GFF3Parser:
                 transcript=gene.getIthTranscript(i)
                 transcripts.append(transcript)
         return transcripts
+    
     def makeGene(self,root):
         gene=Gene()
         root["object"]=gene
@@ -107,6 +114,7 @@ class GFF3Parser:
         for key in extra:
             gene.extraFields+=key+"="+extra[key]+";"
         return gene
+
     def makeTranscript(self,root):
         id=root["extra"]["ID"]
         strand=root["strand"]
@@ -138,6 +146,7 @@ class GFF3Parser:
         for key in extra:
             transcript.extraFields+=key+"="+extra[key]+";"
         return transcript
+
     def makeExon(self,root):
         begin=int(root["begin"])
         end=int(root["end"])
@@ -152,6 +161,7 @@ class GFF3Parser:
         for key in extra:
             exon.extraFields+=key+"="+extra[key]+";"
         return exon
+    
     def labelStructure(self,root):
         obj=None
         t=root["type"]
@@ -162,6 +172,7 @@ class GFF3Parser:
         elif(t=="exon" or t=="CDS"):
             obj=self.makeExon(root)
         return obj
+            
     def loadGenes(self,filename):
         roots=self.loadStructure(filename)
         genes=[]
@@ -169,6 +180,7 @@ class GFF3Parser:
             obj=self.labelStructure(root)
             if(type(obj)==Gene): genes.append(obj)
         return genes
+
     def loadStructure(self,filename):
         records=self.loadRecords(filename)
         idHash={}
@@ -177,22 +189,26 @@ class GFF3Parser:
         roots=self.findRoots(records)
         #for root in roots: self.printStructure(root)
         return roots
+        
     def printStructure(self,rec,depth=0):
         print("\t"*depth+rec["type"]+" "+rec["extra"]["ID"])
         children=rec.get("children",None)
         if(not children): return
         for child in children:
             self.printStructure(child,depth+1)
+            
     def findRoots(self,records):
         roots=[]
         for record in records:
             if(record.get("parent",None) is None):
                 roots.append(record)
         return roots
+
     def addChild(self,parent,child):
         if(parent.get("children",None) is None): parent["children"]=[]
         parent["children"].append(child)
         child["parent"]=parent
+        
     def connectParentsChildren(self,records,idHash):
         for record in records:
             parent=record["extra"].get("Parent",None)
@@ -203,11 +219,13 @@ class GFF3Parser:
                     if(parentRec is None):
                         raise Exception("Cannot find GFF3 parent "+parent)
                     self.addChild(parentRec,record)
+
     def hashRecordsByID(self,records,hash):
         for record in records:
             extraHash=record["extra"]
             ID=extraHash.get("ID",None)
             if(ID is not None): hash[ID]=record
+    
     def loadRecords(self,filename):
         fh=open(filename,"rt")
         records=[]
@@ -221,6 +239,7 @@ class GFF3Parser:
             records.append(rec)
         fh.close()
         return records
+
     def parseRecord(self,fields):
         if(len(fields)>9):
             raise Exception("too many fields in GFF3 record"+"\t".join(fields))
@@ -244,6 +263,9 @@ class GFF3Parser:
              "frame":frame,
              "extra":extraHash}
         return rec
+
+
+    
 # =========================================================================
 def test_parser1(filename):
     parser=GFF3Parser()
@@ -271,6 +293,7 @@ def test_parser1(filename):
                 print("\t\tUTR ",exon.getBegin(),exon.getEnd(),exon.getStrand(),
                       exon.order,exon.getTranscript().getID(),exon.getFrame(),
                       exon.getScore(),exon.getSubstrate(),exon.getType())
+
 def test_parser2(filename):
     parser=GFF3Parser()
     transcripts=parser.loadGFF(filename)
@@ -292,6 +315,7 @@ def test_parser2(filename):
             print("\t\tUTR ",exon.getBegin(),exon.getEnd(),exon.getStrand(),
                   exon.order,exon.getTranscript().getID(),exon.getFrame(),
                   exon.getScore(),exon.getSubstrate(),exon.getType())
+
 def test_parser3(filename):
     reader=GFF3Parser()
     hashTable=reader.hashBySubstrate(filename)
@@ -299,6 +323,7 @@ def test_parser3(filename):
         transcripts=hashTable[substrate]
         for transcript in transcripts:
             print(transcript.getID())
+            
 def test_parser4(filename):
     reader=GFF3Parser()
     hashTable=reader.hashGenesBySubstrate(filename)
@@ -306,21 +331,25 @@ def test_parser4(filename):
         genes=hashTable[substrate]
         for gene in genes:
             print(gene.getID())
+
 def test_parser5(filename):
     reader=GFF3Parser()
     hash=reader.loadTranscriptIdHash(filename)
     for id in hash:
         transcript=hash[id]
         print(transcript.getId())
+
 def test_parser6(filename):
     reader=GFF3Parser()
     hash=reader.loadGeneIdHash(filename)
     for id in hash:
         gene=hash[id]
         print(gene.getId())
+
 def test_parser7(filename):
     reader=GFF3Parser()
     genes=reader.loadGenes(filename)
     for gene in genes:
         print(gene.toGff())
+        
 #test_parser7("/Users/bmajoros/python/test/data/subset.gff3")

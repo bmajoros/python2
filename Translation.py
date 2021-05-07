@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii, 
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from NgramIterator import NgramIterator
+
 ######################################################################
 # Attributes:
 #    codon (class attribute) hash: codon -> amino acid
@@ -38,12 +39,15 @@ from NgramIterator import NgramIterator
 #    initComplementMap()
 #    nucleotide=complement($nucleotide)
 ######################################################################
+
 class Translation:
     """Translation provides routines for translating or reverse-
     complementing nucleotide sequences
     """
+
     codon={}
     complementMap={}
+    
     @classmethod
     def translate(cls,transcript):
         translation=""
@@ -54,6 +58,7 @@ class Translation:
             if(not residue): residue="X"
             translation+=residue
         return translation
+
     @classmethod
     def reverseComplement(cls,seq):
         L=len(seq)
@@ -61,10 +66,12 @@ class Translation:
         for i in range(0,L):
             buffer+=cls.complement(seq[L-i-1:L-i])
         return buffer
+
     @classmethod
     def complement(cls,c):
         if(cls.complementMap.get(c,None) is None): cls.complementMap[c]="N";
         return cls.complementMap[c]
+
     @classmethod
     def initComplementMap(cls):
         cls.complementMap['A']='T'
@@ -75,6 +82,7 @@ class Translation:
         cls.complementMap['Y']='R'
         cls.complementMap['-']='-' # for gaps in alignments
         cls.complementMap['N']='N' ### <------DEBUGGING!
+
     @classmethod
     def getFourfoldDegenerateCodons(cls):
         codonMap=cls.codon
@@ -93,6 +101,8 @@ class Translation:
             if(len(acids)>1): continue
             for codon in codons: degenerate.add(codon)
         return degenerate
+            
+
     @classmethod
     def initCodonMap(cls):
         cls.codon["GTT"]='V'
@@ -191,5 +201,8 @@ class Translation:
         cls.codon["AGG"]='R'
         cls.codon["AGA"]='R'
         cls.codon["AGY"]='R'
+                
 Translation.initCodonMap()
 Translation.initComplementMap();
+
+

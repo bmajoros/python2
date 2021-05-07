@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from Bed3Record import Bed3Record
+
 #=========================================================================
 # Inherited Attributes:
 #   chr : string
@@ -48,10 +49,13 @@ class Bed6Record(Bed3Record):
         self.name=name
         self.score=score
         self.strand=strand
+
     def isBed3(self):
         return False
+
     def isBed6(self):
         return True
+
     def toString(self):
         s=self.chr+"\t"+str(self.interval.begin)+"\t"+str(self.interval.end)\
             +"\t"+self.name

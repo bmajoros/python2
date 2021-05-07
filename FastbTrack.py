@@ -26,6 +26,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from FastaWriter import FastaWriter
 from Interval import Interval
+
 ######################################################################
 #
 # FastbTrack.py bmajoros@duke.edu 10/14/2016
@@ -65,22 +66,29 @@ from Interval import Interval
 #   meanValue=track.getMean(interval=None) # only for continuous data
 #   (maxValue,maxPos)=track.getMax(interval=None) # only for continuous data
 ######################################################################
+
 class FastbTrack:
     def __init__(self,type,id,data,deflineExtra=""):
         self.type=type
         self.id=id
         self.data=data
         self.deflineExtra=deflineExtra
+
     def getType(self):
         return self.type
+
     def getData(self):
         return self.data
+
     def isDiscrete(self):
         return self.type=="discrete"
+
     def isContinuous(self):
         return self.type=="continuous"
+
     def getID(self):
         return self.id
+
     def save(self,fh):
         writer=FastaWriter()
         id=self.id
@@ -92,6 +100,7 @@ class FastbTrack:
             fh.write("%"+id+" "+deflineExtra+"\n")
             n=len(data)
             for i in range(0,n): fh.write(str(data[i])+"\n")
+
     def getContiguousRegions(self):
         """getContiguousRegions() returns an array of Interval objects
         with a "value" attribute added
@@ -114,6 +123,7 @@ class FastbTrack:
         interval.value=data[L-1]
         intervals.append(interval)
         return intervals
+
     def getDiscreteContiguousRegions(self):
         """getDiscreteContiguousRegions() returns an array of Interval objects
         with a "value" attribute added
@@ -136,6 +146,7 @@ class FastbTrack:
         interval.value=data[L-1]
         intervals.append(interval)
         return intervals
+
     def getZeroRegions(self):
         """getNonzeroRegions() returns array of Intervals"""
         data=self.data
@@ -151,6 +162,7 @@ class FastbTrack:
         if(L>0 and data[L-1]==0):
             intervals.append(Interval(begin,L))
         return intervals
+
     def getNonzeroRegions(self):
         """getNoneroRegions() returns array of Intervals"""
         data=self.data
@@ -166,6 +178,7 @@ class FastbTrack:
         if(L>0 and data[L-1]!=0):
             intervals.append(Interval(begin,L))
         return intervals
+
     def getRegionsAbove(self,cutoff):
         """getRegionsAbove() returns array of Intervals"""
         data=self.data
@@ -181,17 +194,23 @@ class FastbTrack:
         if(L>0 and data[L-1]>cutoff):
             intervals.append(Interval(begin,L))
         return intervals
+
     def rename(self,newID):
         self.id=newID
+
     def getLength(self):
         return len(self.data)
+
     def slice(self,begin,end):
         return FastbTrack(self.type,self.id,self.data[begin:end],
                           self.deflineExtra)
+
     def setSequence(self,string):
         self.data=string
+
     def setData(self,values):
         self.data=values
+
     def getMean(self,interval=None):
         data=self.data
         L=len(data)
@@ -205,6 +224,7 @@ class FastbTrack:
         for i in range(begin,end): sum+=data[i]
         mean=sum/L
         return mean
+
     def getMax(self,interval=None):
         data=self.data
         L=len(data)
@@ -220,8 +240,10 @@ class FastbTrack:
                 max=data[i]
                 maxPos=i
         return (max,maxPos)
+
     def anyZeroValues(self):
         data=self.data
         for x in data:
             if(x==0.0): return True
         return False
+

@@ -29,6 +29,7 @@ from Rex import Rex
 rex=Rex()
 from CigarOp import CigarOp
 from Interval import Interval
+
 #=========================================================================
 # Attributes:
 #   ops : array of CigarOp
@@ -51,25 +52,30 @@ class CigarString:
     """CigarString parses CIGAR strings (alignments)"""
     def __init__(self,cigar):
         self.ops=self.parse(cigar)
+
     def setOps(self,ops):
         self.ops=ops
+
     def matchesByLength(self):
         matches=[]
         for op in self.ops:
             if(op.getOp() in ("M","=","X")): matches.append(op)
         matches.sort(key=lambda x: -x.getLength())
         return matches
+
     def countIndelBases(self):
         N=0
         for op in self.ops:
             c=op.getOp()
             if(c=="I" or c=="D"): N+=1
         return N
+
     def totalAlignmentLength(self):
         L=0
         for op in self.ops:
             if(op.getOp() in ("M","=","X")): L+=op.getLength()
         return L
+
     def computeIntervals(self,refPos):
         ops=self.ops
         n=len(ops)
@@ -83,13 +89,17 @@ class CigarString:
             op.interval1=Interval(begin1,end1)
             op.interval2=Interval(begin2,end2)
             begin1=end1; begin2=end2
+
     def length(self):
         return len(self.ops)
+
     def __getitem__(self,i):
         return self.ops[i]
+        
     def completeMatch(self):
         ops=self.ops
         return len(ops)==1 and ops[0].op in ("M","=","X")
+
     def longestMatchStats(self,query,ref):
         m=self.longestMatch()
         if(m is None): return None
@@ -100,10 +110,12 @@ class CigarString:
             if(sub1[i]==sub2[i]): matches+=1
             else: mismatches+=1
         return (matches,mismatches)
+
     def longestMatchLen(self):
         m=self.longestMatch()
         if(m is None): return 0
         return m.getLength()
+
     def longestMatch(self):
         longest=None
         longestLength=0
@@ -114,6 +126,7 @@ class CigarString:
                     longest=op
                     longestLength=L
         return longest
+
     def toString(self):
         ops=self.ops
         s=""
@@ -121,6 +134,7 @@ class CigarString:
             s+=str(op.length)
             s+=op.op
         return s
+
     def parse(self,cigar):
         array=[]
         if(cigar=="*"): return array
@@ -134,3 +148,4 @@ class CigarString:
             rex.find("\d+.(.*)",cigar)
             cigar=rex[1]
         return array
+

@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 import random
+
 #=========================================================================
 # Attributes:
 #   
@@ -38,6 +39,7 @@ class Shuffler:
     """Shuffler shuffles arrays and strings"""
     def __init__(self):
         pass
+
     @classmethod
     def shuffleArray(cls,array):
         L=len(array)
@@ -46,6 +48,7 @@ class Shuffler:
             temp=array[i]
             array[i]=array[j]
             array[j]=temp
+
     @classmethod
     def shuffleString(cls,string):
         L=len(string)

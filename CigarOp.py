@@ -26,8 +26,10 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from Interval import Interval
+
 ADVANCE_QUERY=set(["M","I","S","H","=","X"])
 ADVANCE_REF=set(["M","D","N","=","X"])
+
 #=========================================================================
 # Attributes:
 #   length : integer
@@ -60,15 +62,22 @@ class CigarOp:
         self.length=L
         self.interval1=None
         self.interval2=None
+
     def getQueryInterval(self):
         return self.interval1
+
     def getRefInterval(self):
         return self.interval2
+
     def getOp(self): 
         return self.op
+
     def getLength(self):
         return self.length
+
     def advanceInQuery(self):
         return self.op in ADVANCE_QUERY
+
     def advanceInRef(self):
         return self.op in ADVANCE_REF
+

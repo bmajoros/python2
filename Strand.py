@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from enum import Enum
+
 #=========================================================================
 # Attributes:
 #   FORWARD : int
@@ -37,6 +38,11 @@ from enum import Enum
 class Strand(Enum):
     FORWARD=1
     REVERSE=0
+        
     @classmethod
     def toString(cls,strand):
         return "+" if strand==strand.FORWARD else "-"
+
+
+
+

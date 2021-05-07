@@ -26,7 +26,10 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 import tempfile
 import os
+
 def generate(suffix=""):
   [fh,filename]=tempfile.mkstemp(suffix)
   os.close(fh)
   return filename
+
+

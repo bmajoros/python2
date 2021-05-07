@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 import re
+
 #=========================================================================
 # Attributes:
 #   match : returned from re.search()
@@ -36,21 +37,27 @@ import re
 #=========================================================================
 class Rex:
     """Rex -- more compact regular expression matching similar to Perl"""
+
     def __init__(self):
         match=None
+
     def find(self,pattern,line):
         self.match=re.search(pattern,line)
         return self.match is not None
+
     def split(self,pattern,line):
         fields=re.split(pattern,line)
         nonEmpty=[]
         for x in fields:
             if(x!=""): nonEmpty.append(x)
         return nonEmpty
+
     def findOrDie(self,pattern,line):
         if(not self.find(pattern,line)): raise Exception("can't parse: "+line)
+
     def __getitem__(self,index):
         return self.match.group(index)
+
 def test_regex():
     rex=Rex()
     line="chr1 HAVANA  initial-exon    34384   34457   .       -       0       transcript_id=ENST00000361813.5;gene_id=ENSG00000198952.7;\n"
@@ -64,3 +71,6 @@ def test_regex():
     #              "dog1cat2cow8chicken100")):
     #    x=rex[1]; y=rex[4]
     #print(x,y)
+
+
+

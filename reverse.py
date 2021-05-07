@@ -30,15 +30,19 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 # Python 3.  You might need to update your version of module "future".
 import sys
 import ProgramName
+
 #=========================================================================
 # main()
 #=========================================================================
 if(len(sys.argv)!=2):
     exit(ProgramName.get()+" <infile.txt>\n")
 (infile,)=sys.argv[1:]
+
 lines=[]
 with open(infile,"rt") as IN:
     for line in IN:
         lines.append(line)
 for i in range(len(lines)-1,-1,-1):
     print(lines[i],end="")
+
+

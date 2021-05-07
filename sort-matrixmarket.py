@@ -33,14 +33,17 @@ import ProgramName
 import gzip
 from Pipe import Pipe
 import TempFilename
+
 HEADERFILE=TempFilename.generate(".header")
 SORTEDFILE=TempFilename.generate(".sorted")
+
 #=========================================================================
 # main()
 #=========================================================================
 if(len(sys.argv)!=4):
     exit(ProgramName.get()+" in.mtx.gz column out.mtx.gz\n    where column = 1-based field index\n")
 (infile,index,outfile)=sys.argv[1:]
+
 OUT=open(HEADERFILE,"wt")
 numHeader=1
 with gzip.open(infile,"rt") as IN:
@@ -53,6 +56,7 @@ with gzip.open(infile,"rt") as IN:
             print(line,file=OUT,end="")
             break
 IN.close(); OUT.close()
+
 cmd="cat "+infile+" | gunzip | tail -n +"+str(numHeader+1)+\
     " | sort -g -k "+index+" > "+SORTEDFILE
 Pipe.run(cmd)

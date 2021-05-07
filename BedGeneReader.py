@@ -26,6 +26,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from BedReader import BedReader
 from BedGene import BedGene
+
 #=========================================================================
 # Attributes:
 #   
@@ -43,10 +44,12 @@ class BedGeneReader:
     """BedGeneReader reads BedGene objects from a BED file"""
     def __init__(self):
         pass
+
     def read(self,CDS_filename,UTR_filename=None):
         genes=self.readCDS(CDS_filename)
         if(UTR_filename): self.addUTR(UTR_filename,genes)
         return genes
+
     def readCDS(self,filename):
         reader=BedReader(filename)
         genes=[]
@@ -65,11 +68,13 @@ class BedGeneReader:
             gene.addCDS(record.interval)
         reader.close()
         return genes
+
     def hashGenes(self,genes):
         hash={}
         for gene in genes:
             hash[gene.ID]=gene
         return hash
+
     def addUTR(self,filename,genes):
         hash=self.hashGenes(genes)
         reader=BedReader(filename)

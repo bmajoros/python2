@@ -27,6 +27,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from EssexParser import EssexParser
 import sys
+
 BASE="/Users/bmajoros/python/test/data"
 filename=BASE+"/HG00096-1-subset.essex"
 parser=EssexParser(filename)

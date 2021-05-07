@@ -31,14 +31,20 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 import sys
 import ProgramName
 from EssexParser import EssexParser
+
 #=========================================================================
 # main()
 #=========================================================================
 if(len(sys.argv)!=2):
     exit(ProgramName.get()+" <in.essex>\n")
 (infile,)=sys.argv[1:]
+
 parser=EssexParser(infile)
 while(True):
     tree=parser.nextElem()
     if(tree is None): break
     tree.print(sys.stdout)
+
+
+
+

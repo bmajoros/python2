@@ -29,6 +29,7 @@ import random
 import ProgramName
 import sys
 from FastaWriter import FastaWriter
+
 if(len(sys.argv)!=3):
     exit(ProgramName.get()+" <length> <id>")
 L=int(sys.argv[1])
@@ -39,5 +40,8 @@ for i in range(L):
     index=int(random.random()*4)
     nuc=alphabet[index]
     seq+=nuc
+
 writer=FastaWriter()
 writer.addToFasta(">"+id,seq,sys.stdout)
+
+

@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii, 
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 import math
+
 ######################################################################
 # Attributes:
 #    
@@ -37,10 +38,12 @@ import math
 #    array=SummaryStats.getQuantiles(values,numQuantiles)
 #    (mean,SD,Min,Max)=SummaryStats.trimmedStats(array,percent)
 ######################################################################
+
 class SummaryStats:
     """SummaryStats computes simple mean, variance, and correlation
        statistics
     """
+
     @classmethod
     def median(self,array):
         a=[]
@@ -51,6 +54,7 @@ class SummaryStats:
         halfN=int(n/2)
         if(n%2==1): return a[halfN]
         return (a[halfN-1]+a[halfN])/2
+
     @classmethod
     def getQuantiles(self,values,numQuantiles):
         a=[]
@@ -64,6 +68,7 @@ class SummaryStats:
             q.append(a[index])
         q.append(a[n-1])
         return q
+
     @classmethod
     def trimmedStats(self,array,percent):
         sorted=[x for x in array]
@@ -75,6 +80,7 @@ class SummaryStats:
         keep=int(keep)
         sorted=sorted[first:(first+keep)]
         return SummaryStats.summaryStats(sorted)
+
     @classmethod
     def summaryStats(self,array):
         n=len(array)
@@ -94,6 +100,7 @@ class SummaryStats:
         if(varX is not None and varX<0): varX=0
         stddevX=math.sqrt(varX) if varX is not None else None
         return [meanX,stddevX,minX,maxX]
+
     @classmethod
     def roundedSummaryStats(self,array):
         [mean,stddev,min,max]=SummaryStats.summaryStats(array)
@@ -102,6 +109,7 @@ class SummaryStats:
         min=int(100.0*min+5.0/9.0)/100.0
         max=int(100.0*max+5.0/9.0)/100.0
         return [mean,stddev,min,max]
+
     @classmethod
     def sum(self,array):
         s=0.0
@@ -109,6 +117,7 @@ class SummaryStats:
         for i in range(0,n):
             s+=array[i]
         return s;
+
     @classmethod
     def correlation(self,Xs,Ys):
         sumX=0.0
@@ -127,3 +136,4 @@ class SummaryStats:
             sumYY+=y*y
         r=(sumXY-sumX*sumY/n)/math.sqrt((sumXX-sumX*sumX/n)*(sumYY-sumY*sumY/n))
         return r
+

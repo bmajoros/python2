@@ -33,6 +33,7 @@ import ProgramName
 import gzip
 from Rex import Rex
 rex=Rex()
+
 #=========================================================================
 # Attributes:
 #    FH : file handle
@@ -53,8 +54,10 @@ class MatrixMarket:
             self.FH=open(filename,"rt")
         self.header=None
         self.nextLine=None
+
     def getHeader(self):
         return self.header
+
     def nextGroup(self,colIndex):
         line=None
         # First, see if the header needs to be parsed
@@ -88,6 +91,7 @@ class MatrixMarket:
             group.append(fields)
             line=self.FH.readline()
             if(line is None): return None
+
     @classmethod
     def loadFile(self,filename,colIndex):
         reader=MatrixMarket(filename)

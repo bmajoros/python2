@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from Pipe import Pipe
+
 #=========================================================================
 # Attributes:
 #   Matrix of the form:
@@ -44,12 +45,14 @@ class Fisher2x2:
         self.x01=x01
         self.x10=x10
         self.x11=x11
+
     def getPvalue(self):
         executable=Pipe.run("which fisher-exact-test.R")
         cmd=executable+" "+str(self.x00)+" "+str(self.x01)+" "+\
             str(self.x10)+" "+str(self.x11)
         P=float(Pipe.run(cmd))
         return P
+
     def getExpectedCounts(self):
         x00=float(self.x00); x01=float(self.x01)
         x10=float(self.x10); x11=float(self.x11)
@@ -63,3 +66,6 @@ class Fisher2x2:
         exp10=int(round(pBottom*leftSum,0))
         exp11=int(round(pBottom*rightSum,0))
         return (exp00,exp01,exp10,exp11)
+        
+
+

@@ -35,6 +35,7 @@ rex=Rex()
 import TempFilename
 from CigarString import CigarString
 from FastaWriter import FastaWriter
+
 #=========================================================================
 # Attributes:
 #   
@@ -42,6 +43,7 @@ from FastaWriter import FastaWriter
 #   aligner=SmithWaterman(alignerDir,matrixFile,openPenalty,extrendPenalty)
 #   cigarString=aligner.align(seq1,seq2)
 #=========================================================================
+
 class SmithWaterman:
     def __init__(self,alignerDir,matrixFile,gapOpenPenalty,gapExtendPenalty):
         self.alignerDir=alignerDir
@@ -49,10 +51,12 @@ class SmithWaterman:
         self.gapOpen=gapOpenPenalty
         self.gapExtend=gapExtendPenalty
         self.fastaWriter=FastaWriter()
+
     def writeFile(self,defline,seq):
         filename=TempFilename.generate("fasta")
         self.fastaWriter.writeFasta(defline,seq,filename)
         return filename
+
     def swapInsDel(self,cigar):
         # This is done because my aligner defines insertions and deletions
         # opposite to how they're defined in the SAM specification
@@ -62,6 +66,7 @@ class SmithWaterman:
             elif(x=="D"): x="I"
             newCigar+=x
         return newCigar
+
     def align(self,seq1,seq2):
         file1=self.writeFile("query",seq1)
         file2=self.writeFile("reference",seq2)
@@ -75,3 +80,6 @@ class SmithWaterman:
         cigar=rex[1]
         cigar=self.swapInsDel(cigar) # because I define cigars differently
         return CigarString(cigar)
+
+
+

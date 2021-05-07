@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from Interval import Interval
+
 ######################################################################
 #
 # Exon.pm
@@ -84,6 +85,7 @@ from Interval import Interval
 #   exon.setBegin(begin)
 #   exon.setEnd(end)
 ######################################################################
+
 class Exon:
     def __init__(self,begin,end,transcript):
         self.begin=begin
@@ -94,16 +96,22 @@ class Exon:
         self.strand=transcript.getStrand() if transcript else None
         self.order=None
         self.frame=None
+
     def setBegin(self,begin):
         self.begin=begin
+
     def setEnd(self,end):
         self.end=end
+
     def containsCoordinate(self,x):
         return x>=self.begin and x<self.end
+
     def asInterval(self):
         return Interval(self.begin,self.end)
+
     def getLength(self):
         return self.end-self.begin
+
     def trimInitialPortion(self,numBases):
         """Trims a certain number of bases from the translationally early
         part of the exon.
@@ -113,6 +121,7 @@ class Exon:
         sequence=self.sequence
         if(sequence is not None):
             self.sequence=sequence[numBases:len(sequence)-numBases]
+
     def trimFinalPortion(self,numBases):
         """Trims a certain number of bases from the translationally late
         part of the exon
@@ -122,23 +131,32 @@ class Exon:
         sequence=self.sequence
         if(sequence):
             self.sequence=sequence[0:len(sequence)-numBases]
+
     def getStrand(self):
         return self.transcript.strand
+
     def overlaps(self,otherExon):
         return self.begin<otherExon.end and otherExon.begin<self.end
+
     def getSequence(self):
         return self.sequence
+
     def getTranscript(self):
         return self.transcript
+
     def getBegin(self):
         return self.begin
+
     def getEnd(self):
         return self.end
+
     def getFrame(self):
         frame=self.frame
         return frame if frame is not None else "."
+
     def getType(self):
         return self.type
+
     def toGff(self):
         transcript=self.getTranscript()
         substrate=self.getSubstrate()
@@ -157,41 +175,53 @@ class Exon:
                           strand,str(frame),
                           "transcript_id \""+transcriptId+"\"; gene_id \""+
                           geneId+"\"\n"])
+
     def setScore(self,score):
         self.score=score
+
     def getScore(self):
         score=self.score
         return score if score else "."
+
     def setType(self,type):
         self.type=type
+
     def shiftCoords(self,delta):
         self.begin+=delta
         self.end+=delta
+
     def setFrame(self,frame):
         self.frame=frame
+
     def getStrand(self):
         strand=self.strand
         if(strand): return strand
         return self.transcript.getStrand()
+
     def setStrand(self,strand):
         self.strand=strand
+
     def getSubstrate(self):
         substrate=self.substrate if hasattr(self,'substrate') else None
         if(substrate): return substrate
         return self.transcript.getSubstrate()
+
     def setSubstrate(self,substrate):
         self.substrate=substrate
+
     def compStrand(self,strand):
         if(strand=="+"): return "-"
         if(strand=="-"): return "+"
         if(strand=="."): return "."
         raise Exception("Unknown strand \""+strand+"\"")
+
     def reverseComplement(self,seqLen):
         begin=self.getBegin()
         end=self.getEnd()
         self.begin=seqLen-end
         self.end=seqLen-begin
         self.strand=self.compStrand(self.strand)
+
     def copy(self):
         new=Exon(self.begin,self.end,self.transcript)
         new.score=self.score

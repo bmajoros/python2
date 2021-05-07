@@ -28,6 +28,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 from Rex import Rex
 rex=Rex()
 import gzip
+
 #=========================================================================
 # Attributes:
 #   fh : file handle
@@ -46,8 +47,10 @@ class FastqReader:
         if(filename is not None):
             if(rex.find("\.gz$",filename)): self.fh=gzip.open(filename,"rt")
             else: self.fh=open(filename,"r")
+
     def close(self):
         self.fh.close()
+
     def nextSequence(self):
         fh=self.fh
         line=fh.readline()
@@ -64,3 +67,6 @@ class FastqReader:
         qualSeq=fh.readline().rstrip()
         qual=[ord(x)-33 for x in qualSeq]
         return (ID,seq,qual,qualSeq,pair)
+        
+
+

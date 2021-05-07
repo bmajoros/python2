@@ -31,10 +31,12 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 import sys
 import os
 import gzip
+
 if(len(sys.argv)!=3):
    print(sys.argv[0]+" <in.vcf.gz> <indiv>")
    sys.exit(0)
 (infile,indiv)=sys.argv[1:]
+
 numIndiv=None
 with gzip.open(infile,"rt") as IN:
    for line in IN:
@@ -58,3 +60,4 @@ print("\n")
 for id in individuals:
    gt=genotype[id]
    print(id+"\t"+"\t".join(gt))
+

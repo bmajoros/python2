@@ -3,11 +3,13 @@ import sys
 import os
 import re
 import basic
+
 name=sys.argv[0];
 if(len(sys.argv)!=2):
    print(name+" <*.vcf>")
    sys.exit(0)
 [name,vcfFile]=sys.argv;
+
 IN=open(vcfFile,"r")
 while(True):
   line=IN.readline()
@@ -23,3 +25,4 @@ while(True):
      id=chr+"at"+pos;
   print(id+"\t"+chr+"\t"+pos+"\t"+ref+"\t"+alt)
 IN.close();
+

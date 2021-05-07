@@ -24,6 +24,7 @@ from __future__ import (absolute_import, division, print_function,
    unicode_literals, generators, nested_scopes, with_statement)
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
+
 ######################################################################
 # bmajoros@duke.edu 10/15/2016
 #
@@ -48,6 +49,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 # Methods:
 #   codon=Codon(exon,triplet,relative,absolute,isInterrupted)
 ######################################################################
+
 class Codon:
     def __init__(self,exon,triplet,relative,absolute,isInterrupted):
         if(relative is None): raise Exception("relative is not set")
@@ -56,3 +58,5 @@ class Codon:
         self.relativeCoord=relative
         self.absoluteCoord=absolute
         self.isInterrupted=isInterrupted
+
+        

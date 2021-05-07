@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from Interval import Interval
+
 #=========================================================================
 # Attributes:
 #   ID : name of gene
@@ -52,6 +53,7 @@ class BedGene:
         self.CDS=[]
         self.UTR=[]
         self.exons=[]
+
     def getInterval(self):
         cdsInterval=self.getInterval_array(self.CDS)
         utrInterval=self.getInterval_array(self.UTR)
@@ -69,18 +71,23 @@ class BedGene:
             if(not end or exonInterval.end>end):
                 end=exonInterval.end
         return Interval(begin,end)
+
     def getInterval_array(self,array):
         begin=end=None
         for interval in array:
             if(not begin or interval.begin<begin): begin=interval.begin
             if(not end or interval.end>end): end=interval.end
         return Interval(begin,end)
+
     def addCDS(self,interval):
         self.CDS.append(interval)
+
     def addUTR(self,interval):
         self.UTR.append(interval)
+
     def addExon(self,interval):
         self.exons.append(interval)
+
     def coalesce(self):
         exons=self.exons=[]
         for cds in self.CDS: exons.append(cds.clone())

@@ -30,6 +30,7 @@ rex=Rex()
 import gzip
 from SamRecord import SamRecord
 from CigarString import CigarString
+
 #=========================================================================
 # Attributes:
 #   fh : file handle
@@ -48,13 +49,16 @@ class SamReader:
         if(filename is not None):
             if(rex.find("\.gz$",filename)): self.fh=gzip.open(filename,"rt")
             else: self.fh=open(filename,"r")
+
     def close(self):
         self.fh.close()
+
     def nextSequence(self):
         pair=self.nextSeqAndText()
         if(pair is None): return None
         (rec,line)=pair
         return rec
+
     def nextSeqAndText(self):
         headerChars=set(["@","["])
         fh=self.fh
@@ -74,4 +78,6 @@ class SamReader:
         tags=fields[11:]
         rec=SamRecord(ID,refName,refPos,CIGAR,seq,flags,tags)
         return (rec,line)
+
 # M03884:303:000000000-C4RM6:1:1101:1776:15706    99      chrX:31786371-31797409  6687    44      150M    =       6813    271     ATACTATTGCTGCGGTAATAACTGTAACTGCAGTTACTATTTAGTGATTTGTATGTAGATGTAGATGTAGTCTATGTCAGACACTATGCTGAGCATTTTATGGTTGCTATGTACTGATACATACAGAAACAAGAGGTACGTTCTTTTACA  BBBBFFFFFFFGGGGGEFGGFGHFHFFFHHHFFHHHFHFHHHGFHEDGGHFHBGFHGBDHFHFFFHHHHFHHHHHGHGFFBGGGHFHFFHHFFFFHHHHGHGFHHGFHGHHHGFHFFHHFHHFFGFFFFGGEHFFEHHFGHHHGHHHHFB  AS:i:300        XN:i:0  
+

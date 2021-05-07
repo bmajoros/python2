@@ -26,6 +26,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from EssexToken import EssexToken
 import re
+
 ######################################################################
 #
 # A token scanner for the EssexParser.
@@ -45,22 +46,27 @@ import re
 #   unGetChar
 #   skipWhitespace
 ######################################################################
+
 class EssexScanner:
     def __init__(self,file):
         self.file=file
         self.nextTok=None
         self.ungot=None
+
     def close(self):
         self.file.close()
+
     def nextToken(self):
         token=self.peek()
         self.nextTok=None
         return token
+
     def match(self,tokenType):
         token=self.nextToken()
         if(token.getType()!=tokenType):
             lexeme=token.getLexeme()
             raise Exception("Syntax error near \""+lexeme+"\"")
+
     def peek(self):
         if(not self.nextTok):
             file=self.file
@@ -85,6 +91,7 @@ class EssexScanner:
             lexeme=lexeme.replace("&space;"," ")
             self.nextTok=EssexToken(tokenType,lexeme)
         return self.nextTok
+
     def getChar(self):
         c=None
         if(self.ungot):
@@ -94,8 +101,10 @@ class EssexScanner:
             c=self.file.read(1)
             if(len(c)==0): c=None
         return c
+
     def unGetChar(self,c):
         self.ungot=c
+
     def skipWhitespace(self):
         while(True):
             c=self.getChar()
@@ -108,3 +117,4 @@ class EssexScanner:
             if(not re.search("\s",c)):
                 self.unGetChar(c)
                 return
+        

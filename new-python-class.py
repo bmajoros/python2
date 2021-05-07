@@ -28,11 +28,13 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 import os
 import sys
 import ProgramName
+
 # Process command line
 name=ProgramName.get();
 if(len(sys.argv)!=2):
     sys.exit(name+" <classname>")
 className=sys.argv[1]
+
 # Write file
 filename=className+".py"
 if(os.path.exists(filename)):
@@ -81,3 +83,5 @@ fh.write("    def __init__(self):\n")
 fh.write("        pass\n")
 fh.write("\n\n\n")
 fh.close()
+
+

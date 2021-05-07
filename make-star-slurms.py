@@ -4,6 +4,7 @@ import os
 import basic
 import glob
 import re
+
 # Global variables
 jobName="STAR"
 samplesDir="/data/chilab/RNAseq_2015-07"
@@ -15,13 +16,16 @@ sjdbOverhang=125
 numThreads=8
 memory=40000
 STAR="/data/reddylab/software/STAR_2.4.2a/STAR-STAR_2.4.2a/bin/Linux_x86_64/STAR";
+
 # Make output directories
 if(not os.path.exists(slurmDir)):
     os.makedirs(slurmDir)
 if(not os.path.exists(outputDir)):
     os.makedirs(outputDir);
+
 # Get list of sample directories
 samples=glob.glob(samplesDir+"/Sample_*")
+
 # Process each sample
 jobID=1
 for sample in samples:
@@ -40,6 +44,7 @@ for sample in samples:
   print >>OUT, header
   #print >>OUT, "cd "+outputDir
   print >>OUT, "cd "+outputDir
+
   # Process each file
   files=glob.glob(sample+"/*.fastq.gz")
   for file in files:
@@ -59,5 +64,7 @@ for sample in samples:
     filestem=match.group(1)
     command=STAR+" --genomeLoad LoadAndKeep --genomeDir %(starIndex)s --readFilesIn %(firstFile)s %(secondFile)s --readFilesCommand zcat --outFileNamePrefix %(filestem)s --outSAMstrandField intronMotif --runThreadN %(numThreads)i" % locals()
     print >>OUT, command
+
   OUT.close()
   jobID=jobID+1
+

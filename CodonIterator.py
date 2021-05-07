@@ -27,6 +27,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 from Codon import Codon
 from Exon import Exon
 from Translation import Translation
+
 ######################################################################
 # bmajoros@duke.edu 10/15/2016
 #
@@ -46,10 +47,12 @@ from Translation import Translation
 #   codon=iterator.nextCodon(); # or None if no more
 #   codons=iterator.getAllCodons()
 ######################################################################
+
 class CodonIterator:
     def __init__(self,transcript,axisSequenceRef,stopCodons):
         self.transcript=transcript
         self.stopCodons=stopCodons
+
         # Advance to the exon containing the start codon
         exons=transcript.exons
         strand=transcript.strand
@@ -82,6 +85,7 @@ class CodonIterator:
             else:
                 self.absolute=exon.getEnd()-1-add
                 self.relative=add
+
     def getAllCodons(self):
         codons=[]
         while(True):
@@ -89,6 +93,7 @@ class CodonIterator:
             if(not codon): break
             codons.append(codon)
         return codons
+
     def nextCodon(self):
         isStopCodon=self.stopCodons
         exon=self.exon
@@ -153,3 +158,4 @@ class CodonIterator:
         codon=Codon(exon,triplet,relative,absolute,isInterrupted)
         codon.basesInExon=thisExonContrib
         return codon
+

@@ -26,6 +26,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 import re
 from FastbTrack import FastbTrack
+
 ######################################################################
 #
 # Fastb.py bmajoros@duke.edu 10/14/2016
@@ -51,24 +52,31 @@ from FastbTrack import FastbTrack
 #   fastb=Fastb()
 #   load(filename)
 ######################################################################
+
 class Fastb:
     def __init__(self,filename=None):
         self.trackArray=[]
         self.trackHash={}
         if(filename and len(filename)>0): self.load(filename)
+
     def numTracks(self):
         return len(self.trackArray)
+
     def getIthTrack(self,i):
         return self.trackArray[i]
+
     def getTrackByName(self,id):
         return self.trackHash[id]
+
     def addTrack(self,track):
         self.trackArray.append(track)
         self.trackHash[track.getID()]=track
+
     def save(self,filename):
         with open(filename,"w") as OUT:
             N=self.numTracks()
             for i in range(0,N): self.getIthTrack(i).save(OUT)
+
     def renameTrack(self,oldName,newName):
         hash=self.trackHash
         oldTrack=hash[oldName]
@@ -76,9 +84,11 @@ class Fastb:
         oldTrack.rename(newName)
         hash[newName]=oldTrack
         del hash[oldName]
+
     def getLength(self):
         if(self.numTracks()==0): return 0
         return self.getIthTrack(0).getLength()
+
     def slice(self,begin,end):
         newFastb=Fastb()
         n=self.numTracks()
@@ -86,8 +96,10 @@ class Fastb:
             track=self.getIthTrack(i)
             newFastb.addTrack(track.slice(begin,end))
         return newFastb
+
     def sliceInterval(self,interval):
         return self.slice(interval.begin,interval.end)
+
     def dropTrack(self,name):
         n=self.numTracks()
         index=None
@@ -98,6 +110,7 @@ class Fastb:
         if(index is None): raise Exception("can't find track "+name)
         del self.trackArray[index]
         del self.trackHash[name]
+
     def load(self,filename):
         lines=[]
         with open(filename,"r") as IN:

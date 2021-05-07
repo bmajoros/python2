@@ -27,6 +27,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 # The above imports should allow this program to run in both Python 2 and
 # Python 3.  You might need to update your version of module "future".
+
 ######################################################################
 #
 # NgramIterator.py bmajoros
@@ -41,6 +42,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 # Private methods:
 #   self.ngramToString()
 ######################################################################
+
 class NgramIterator:
 #---------------------------------------------------------------------
 #                           PUBLIC METHODS
@@ -82,6 +84,12 @@ class NgramIterator:
 #---------------------------------------------------------------------
 #---------------------------------------------------------------------
 #---------------------------------------------------------------------
+
+
+
+
+
+
 #---------------------------------------------------------------------
 #                         PRIVATE METHODS
 #---------------------------------------------------------------------
@@ -95,3 +103,5 @@ class NgramIterator:
             index=ngram[i]
             string+=alphabet[index:index+1]
         return string
+
+

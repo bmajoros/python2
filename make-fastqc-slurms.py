@@ -4,16 +4,20 @@ import os
 import basic
 import glob
 import re
+
 # Global variables
 samplesDir="/data/chilab/RNAseq_2015-07"
 slurmDir="/data/chilab/bill/slurm-fastqc"
 outputDir="/data/chilab/bill/fastqc"
 fastqc="/data/chilab/bill/software/FastQC/fastqc"
+
 # Make output directory
 if(not os.path.exists(slurmDir)):
     os.makedirs(slurmDir)
+
 # Get list of sample directories
 samples=glob.glob(samplesDir+"/Sample_*")
+
 # Process each sample
 jobID=1
 for sample in samples:
@@ -29,10 +33,12 @@ for sample in samples:
   "#\n"])
   print >>OUT, header
   print >>OUT, "cd "+outputDir
+
   # Process each file
   files=glob.glob(sample+"/*.fastq.gz")
   for file in files:
     command=fastqc+" -o "+outputDir+" "+file
     print >>OUT, command
+
   OUT.close()
   jobID=jobID+1

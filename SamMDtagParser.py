@@ -24,6 +24,7 @@ from __future__ import (absolute_import, division, print_function,
    unicode_literals, generators, nested_scopes, with_statement)
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
+
 #=========================================================================
 # Attributes:
 #   
@@ -36,6 +37,7 @@ class SamMDtagParser:
     """SamMDtagParser"""
     def __init__(self):
         pass
+
     @classmethod
     def countMismatches(cls,MDtags):
         mismatches=0
@@ -44,3 +46,6 @@ class SamMDtagParser:
             if(i%2==1):
                 if(len(MDtags[i])==1): mismatches+=1
         return mismatches
+
+
+

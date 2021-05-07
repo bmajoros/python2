@@ -4,17 +4,21 @@ import os
 import basic
 import glob
 import re
+
 # Global variables
 jobName="bam"
 slurmDir="/data/chilab/bill/slurm-bam"
 samDir="/data/chilab/bill/sam"
 memory=10000
 samtools="/usr/local/bin/samtools"
+
 # Make output directories
 if(not os.path.exists(slurmDir)):
     os.makedirs(slurmDir)
+
 # Get list of sam files
 samFiles=glob.glob(samDir+"/*.sam")
+
 # Process each sam file
 jobID=1
 for samfile in samFiles:
@@ -39,3 +43,4 @@ for samfile in samFiles:
   print >>OUT, command
   OUT.close()
   jobID=jobID+1
+

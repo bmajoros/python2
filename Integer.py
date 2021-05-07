@@ -26,6 +26,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 # The above imports should allow this program to run in both Python 2 and
 # Python 3.  You might need to update your version of module "future".
+
 class Integer(object):
     """Integer is a first-class mutable object, so it can be passed 
     by reference, allowing functions to modify its value.
@@ -140,9 +141,11 @@ class Integer(object):
         return str(self.value)
     def __repr__(self):
         return "Integer("+str(self.value)+")"
+
 #=========================== TESTING CODE =========================
 def testInteger_func(x):
     x+=2
+    
 def testInteger():
     x=Integer(1)
     y=Integer(3)
@@ -160,4 +163,6 @@ def testInteger():
     y=3
     print(x,"%",y,"=",x%y)
     print((x+4-y*2)/x)
+    
 #testInteger()
+

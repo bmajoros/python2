@@ -28,11 +28,13 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 # The above imports should allow this program to run in both Python 2 and
 # Python 3.  You might need to update your version of module "future".
 from GffTranscriptReader import GffTranscriptReader
+
 #filename="/home/bmajoros/1000G/assembly/local-genes.gff"
 #filename="/home/bmajoros/1000G/assembly/tmp.gff"
 #filename="test/data/tmp.gff"
 #filename="test/data/local-genes.gff"
 filename="/home/bmajoros/ensembl/protein-coding.gff"
+
 reader=GffTranscriptReader()
 genes=reader.loadGenes(filename)
 for gene in genes:
@@ -44,11 +46,13 @@ for gene in genes:
     #for i in range(len(exons)):
     #    print("MERGED TO:",exons[i].begin,exons[i].end)
     #    print()
+
 #transcripts=reader.loadGFF(filename)
 #for transcript in transcripts:
     #print(transcript.getID())
     #gff=transcript.toGff()
     #print(gff)
+   
 #genes=reader.loadGenes(filename)
 #for gene in genes:
 #    print("gene",gene.getID())
@@ -58,19 +62,24 @@ for gene in genes:
 #        transID=transcript.getID()
 #        print("\t"+transID+"\t"+str(transcript.getBegin())+"\t"
 #              +str(transcript.getEnd()))
+
 #hashTable=reader.hashBySubstrate(filename)
 #keys=hashTable.keys()
 #for key in keys:
 #    print(key)
+
 #hashTable=reader.hashGenesBySubstrate(filename)
 #keys=hashTable.keys()
 #for key in keys:
 #    print(key)
+
 #hashTable=reader.loadTranscriptIdHash(filename)
 #keys=hashTable.keys()
 #for key in keys:
 #    print(key)
+
 #hashTable=reader.loadGeneIdHash(filename)
 #keys=hashTable.keys()
 #for key in keys:
 #    print(key)
+

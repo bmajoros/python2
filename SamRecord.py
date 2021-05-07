@@ -28,6 +28,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 from Rex import Rex
 rex=Rex()
 from SamMDtagParser import SamMDtagParser
+
 #=========================================================================
 # Attributes:
 #   ID = read identifier
@@ -73,19 +74,24 @@ class SamRecord:
         self.seq=seq
         self.flags=flags
         self.tags=tags
+
     def seqLength(self):
         return len(self.seq)
+
     def getTags(self):
         return self.tags
+
     def getTag(self,label):
         for tag in self.tags:
             if(not rex.find("^([^:]+):[^:]+:(\S+)",tag)):
                 raise Exception("Can't parse SAM tag: "+tag)
             if(rex[1]==label): return rex[2]
         return None
+
     def countMismatches(self):
         N=SamMDtagParser.countMismatches(self.parseMDtag())
         return N
+
     def parseMDtag(self):
         md=self.getTag("MD")
         fields=[]
@@ -103,40 +109,58 @@ class SamRecord:
             else:
                 raise Exception("Can't parse MD tag: "+md)
         return fields
+
     def getRefName(self):
         return self.refName
+
     def getRefPos(self):
         return self.refPos
+    
     def getCigar(self):
         return self.CIGAR
+
     def getID(self):
         return self.ID
+
     def getSequence(self):
         return self.seq
+
     def flag_hasMultipleSegments(self):
         return bool(self.flags & 0x1)
+
     def flag_properlyAligned(self):
         return bool(self.flags & 0x2)
+
     def flag_unmapped(self):
         return bool(self.flags & 0x4)
+
     def flag_nextSegmentUnmapped(self):
         return bool(self.flags & 0x8)
+
     def flag_revComp(self):
         return bool(self.flags & 0x10)
+
     def flag_nextSegmentRevComp(self):
         return bool(self.flags & 0x20)
+
     def flag_firstOfPair(self):
         return bool(self.flags & 0x40)
+
     def flag_secondOfPair(self):
         return bool(self.flags & 0x80)
+
     def flag_secondaryAlignment(self):
         return bool(self.flags & 0x100)
+
     def flag_failedFilters(self):
         return bool(self.flags & 0x200)
+
     def flag_PCRduplicate(self):
         return bool(self.flags & 0x400)
+
     def flag_supplAlignment(self):
         return bool(self.flags & 0x800)
+
 # FLAGS:
 #   0x1 template having multiple segments in sequencing
 #   0x2 each segment properly aligned according to the aligner
@@ -150,4 +174,6 @@ class SamRecord:
 #   0x200 not passing filters, such as platform/vendor quality controls
 # > 0x400 PCR or optical duplicate
 #   0x800 supplementary alignment
+
 # M03884:303:000000000-C4RM6:1:1101:1776:15706    99      chrX:31786371-31797409  6687    44      150M    =       6813    271     ATACTATTGCTGCGGTAATAACTGTAACTGCAGTTACTATTTAGTGATTTGTATGTAGATGTAGATGTAGTCTATGTCAGACACTATGCTGAGCATTTTATGGTTGCTATGTACTGATACATACAGAAACAAGAGGTACGTTCTTTTACA  BBBBFFFFFFFGGGGGEFGGFGHFHFFFHHHFFHHHFHFHHHGFHEDGGHFHBGFHGBDHFHFFFHHHHFHHHHHGHGFFBGGGHFHFFHHFFFFHHHHGHGFHHGFHGHHHGFHFFHHFHHFFGFFFFGGEHFFEHHFGHHHGHHHHFB  AS:i:300        XN:i:0  
+

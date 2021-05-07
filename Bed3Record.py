@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii,
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 from Interval import Interval
+
 #=========================================================================
 # Attributes:
 #   chr : string
@@ -44,14 +45,19 @@ class Bed3Record:
     def __init__(self,chr,begin,end):
         self.chr=chr
         self.interval=Interval(begin,end)
+
     def isBed3(self):
         return True
+
     def isBed6(self):
         return False
+
     def getBegin(self):
         return self.interval.begin
+
     def getEnd(self):
         return self.interval.end
+
     def toString(self):
         return self.chr+"\t"+str(self.interval.begin)+"\t"+\
             str(self.interval.end)

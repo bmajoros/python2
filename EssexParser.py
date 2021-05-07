@@ -28,6 +28,7 @@ import os
 from EssexNode import EssexNode
 from EssexScanner import EssexScanner
 from EssexToken import EssexToken
+
 ######################################################################
 #
 # A parser for the Essex language, which is a simple alternative to XML
@@ -47,10 +48,12 @@ from EssexToken import EssexToken
 # Class methods:
 #   forest=EssexParser.loadFile(filename) # returns array of trees
 ######################################################################
+
 class EssexParser:
     def __init__(self,filename=None):
         self.isOpen=False
         if(filename): self.open(filename)
+
     def open(self,filename):
         if(self.isOpen): self.close()
         if(not os.path.exists(filename)):
@@ -58,11 +61,13 @@ class EssexParser:
         file=self.file=open(filename,"r")
         self.isOpen=True
         self.scanner=EssexScanner(file)
+
     def close(self):
         if(self.isOpen):
             self.file.close()
             self.isOpen=False
             self.scanner=None
+
     def parseAll(self):
         forest=[]
         while(True):
@@ -70,10 +75,12 @@ class EssexParser:
             if(not tree): break
             forest.append(tree)
         return forest
+
     @classmethod
     def loadFile(cls,filename):
         parser=EssexParser(filename)
         return parser.parseAll()
+
     def nextElem(self):
         if(not self.isOpen): raise Exception("file is not open")
         scanner=self.scanner
@@ -84,6 +91,7 @@ class EssexParser:
         else:
             lexeme=token.getLexeme()
             exit("Syntax error near \n"+token+"\n")
+
     def parseTuple(self):
         """PRECONDITION: a "(" has already been matched"""
         elements=[]
@@ -96,3 +104,4 @@ class EssexParser:
             elif(token.isCloseParen()): break
             else: elements.append(token.getLexeme())
         return EssexNode(elements)
+

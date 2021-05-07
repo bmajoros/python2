@@ -2,10 +2,12 @@
 import sys
 import os
 import operator
+
 if(len(sys.argv)!=2):
    print sys.argv[0]+" <in.txt>"
    sys.exit(0)
 [infile]=sys.argv[1:]
+
 f=open(infile)
 header=f.readline()
 variants=header.split()

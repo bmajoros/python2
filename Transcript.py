@@ -31,6 +31,7 @@ from EssexNode import EssexNode
 from Interval import Interval
 import copy
 import re
+
 ######################################################################
 # bmajoros@duke.com 10/15/2016
 #
@@ -132,9 +133,12 @@ import re
 #   transcript.adjustOrders()
 #   transcript.sortExons()
 ######################################################################
+
 class Transcript:
+
     validExonTypes={"single-exon":1, "initial-exon":1, "internal-exon":1,
                     "final-exon":1}
+
     def __init__(self,id,strand=None):
         if(type(id)!=EssexNode): # not an EssexNode
             self.transcriptId=id
@@ -198,6 +202,7 @@ class Transcript:
                     end=int(exon.getIthElem(1))
                     exon=Exon(begin,end,self)
                     UTR.append(exon)
+        
     def equals(self,other):
         if(self.getSource()!=other.getSource()): return False
         if(self.getStrand()!=other.getStrand()): return False
@@ -212,13 +217,16 @@ class Transcript:
             if(thisExon.getBegin()!=thatExon.getBegin()): return False
             if(thisExon.getEnd()!=thatExon.getEnd()): return False
         return True
+
     def compStrand(self,strand):
         if(strand=="+"): return "-"
         if(strand=="-"): return "+"
         if(strand=="."): return "."
         raise Exception("Unknown strand \""+strand)
+
     def setTranscriptId(self,newId):
         self.transcriptId=newId
+
     def reverseComplement(self,seqLen):
         begin=self.getBegin()
         end=self.getEnd()
@@ -229,6 +237,7 @@ class Transcript:
         for exon in exons: exon.reverseComplement(seqLen)
         exons=self.UTR
         for exon in exons: exon.reverseComplement(seqLen)
+
     def exonOverlapsExon(self,exon):
         exons=self.exons
         n=len(exons)
@@ -236,6 +245,7 @@ class Transcript:
             myExon=exons[i]
             if(exon.overlaps(myExon)): return True
         return False
+
     def shiftCoords(self,delta):
         exons=self.exons
         for exon in exons: exon.shiftCoords(delta)
@@ -243,6 +253,7 @@ class Transcript:
         for utr in UTR: utr.shiftCoords(delta)
         self.begin+=delta
         self.end+=delta
+
     def loadExonSequences(self,axisSequenceRef,exons):
         numExons=len(exons)
         strand=self.strand
@@ -259,6 +270,7 @@ class Transcript:
                 exonSeq=Translation.reverseComplement(exonSeq)
             exon.sequence=exonSeq
         return True
+
     def loadTranscriptSeq(self,axisSequenceRef):
         exons=self.getRawExons()
         numExons=len(exons)
@@ -268,10 +280,13 @@ class Transcript:
         for exon in exons: sequence+=exon.sequence
         self.sequence=sequence
         return sequence
+
     def contains(self,begin,end):
         return self.begin<=begin and self.end>=end
+
     def isContainedWithin(self,begin,end):
         return self.begin>=begin and self.end<=end
+
     def overlaps(self,*parms):
         numParms=len(parms)
         if(numParms<1 or numParms>2): raise Exception("1 or 2 parms expected")
@@ -281,36 +296,46 @@ class Transcript:
         otherTranscript=parms[0]
         return self.begin<otherTranscript.end and \
             otherTranscript.begin<self.end
+
     def getLength(self):
         exons=self.exons
         length=0
         for exon in exons: length+=exon.getLength()
         return length
+
     def getExtent(self):
         return self.end-self.begin
+
     def getNumExons(self):
         return len(self.exons)
+
     def numExons(self):
         return len(self.exons)
+
     def getIthExon(self,i):
         return self.exons[i]
+
     def getIthUTR(self,i):
         return self.UTR[i]
+
     def totalUTRlen(self):
         UTR=self.UTR
         len=0
         for utr in UTR: len+=utr.getLength()
         return len
+
     def deleteExon(self,index):
         exons=self.exons
         exons.pop(index)
         self.adjustOrders()
+
     def sortExons(self):
         rev=self.strand=="-"
         self.exons.sort(key=lambda exon: exon.begin,reverse=rev)
         self.UTR.sort(key=lambda exon: exon.begin,reverse=rev)
         if(self.rawExons):
             self.rawExons.sort(key=lambda exon:exon.begin,reverse=rev)
+
     def adjustOrders(self):
         exons=self.exons
         numExons=len(exons)
@@ -322,12 +347,14 @@ class Transcript:
         if(numExons==0): return
         for i in range(numExons):
             exons[i].order=i
+
     def areExonTypesSet(self):
         exons=self.exons
         for exon in exons:
             if(not Transcript.validExonTypes.get(exon.getType(),None)):
                 return False
         return True
+
     def setExonTypes(self,defaultType=None):
         self.setUTRtypes()
         exons=self.exons
@@ -346,6 +373,7 @@ class Transcript:
                     exon.setType("internal-exon")
             exons[0].setType("initial-exon")
             exons[numExons-1].setType("final-exon")
+
     def setUTRtypes(self):
         if(self.numExons()==0):
             UTR=self.UTR
@@ -366,6 +394,7 @@ class Transcript:
                 begin=utr.getBegin()
                 if(begin>CDSbegin): utr.setType("five_prime_UTR")
                 else: utr.setType("three_prime_UTR")
+
     def deleteExonRef(self,victim):
         exons=self.exons
         numExons=len(exons)
@@ -378,6 +407,7 @@ class Transcript:
             raise Exception("Can't find exon "+victim+
                             " in Transcript::deleteExon()")
         self.deleteExon(i)
+
     def recomputeBoundaries(self):
         exons=self.exons
         numExons=len(exons)
@@ -395,6 +425,7 @@ class Transcript:
                 self.begin=utr.getBegin()
             if(utr.getEnd()>self.end):
                 self.end=utr.getEnd()
+
     def addExon(self,exon):
         strand=exon.getStrand()
         exons=self.exons
@@ -402,6 +433,7 @@ class Transcript:
         rev=strand=="-"
         exons.sort(key=lambda exon: exon.begin,reverse=strand=="-")
         self.adjustOrders()
+
     def addRawExon(self,exon):
         strand=exon.getStrand()
         if(self.rawExons is None): self.rawExons=[]
@@ -409,6 +441,7 @@ class Transcript:
         exons.append(exon)
         rev=strand=="-"
         exons.sort(key=lambda exon: exon.begin,reverse=strand=="-")
+
     def addUTR(self,exon):
         strand=exon.getStrand()
         UTR=self.UTR
@@ -416,10 +449,13 @@ class Transcript:
         rev=strand=="-"
         UTR.sort(key=lambda exon: exon.begin,reverse=strand=="-")
         self.adjustOrders()
+
     def getSubstrate(self):
         return self.substrate
+
     def getSource(self):
         return self.source
+
     def toGff(self):
         transID=self.transcriptId
         geneID=self.geneId
@@ -456,26 +492,37 @@ class Transcript:
             exon.type="UTR" ### ?
             gff+=exon.toGff()
         return gff
+
     def getTranscriptId(self):
         return self.transcriptId
+
     def getGeneId(self):
         return self.geneId
+
     def setGeneId(self,id):
         self.geneId=id
+
     def getId(self):
         return self.transcriptId
+
     def getID(self):
         return self.transcriptId
+
     def setSubstrate(self,substrate):
         self.substrate=substrate
+
     def setSource(self,source):
         self.source=source
+
     def getBegin(self):
         return self.begin
+
     def getEnd(self):
         return self.end
+
     def getStrand(self):
         return self.strand
+
     def isWellFormed(self,seq):
         """if(transcript.isWellFormed(sequence)) ...
         This procedure iterates through the codons of this transcript,
@@ -486,6 +533,7 @@ class Transcript:
         considered well-formed only if a stop-codon is encountered.
         """
         stopCodons=self.stopCodons
+
         # 1. Check whether any exons overlap each other
         exons=self.exons
         numExons=len(exons)
@@ -493,6 +541,7 @@ class Transcript:
             exon=exons[i]
             prevExon=exons[i-1]
             if(exon.overlaps(prevExon)): return 0
+
         # 2. Check that there is an in-frame stop-codon
         iterator=CodonIterator(self,seq,stopCodons)
         codons=iterator.getAllCodons()
@@ -501,6 +550,7 @@ class Transcript:
         lastCodon=codons[n-1]
         isStop=stopCodons.get(lastCodon.triplet,None)
         return True if isStop else False
+
     def trimUTR(self,axisSequenceRef):
         self.adjustOrders()
         stopCodons=self.stopCodons
@@ -529,6 +579,7 @@ class Transcript:
                 exon.type="initial-exon" if numExons>1 else "single-exon"
                 self.startCodon=0
                 break
+        
         # Find in-frame stop codon
         codonIterator=CodonIterator(self,axisSequenceRef,stopCodons)
         stopCodonFound=False
@@ -584,6 +635,7 @@ class Transcript:
                           self.transcriptId,self.strand,
                           "strand , unable to trim UTR")
         self.recomputeBoundaries()
+        
     def getScore(self):
         return self.score
         #exons=self.exons
@@ -592,6 +644,7 @@ class Transcript:
         #    exonScore=exon.getScore()
         #    if(exonScore!="."): score+=exonScore
         #return score
+
     def getIntrons(self):
         exons=self.getRawExons()
         numExons=len(exons)
@@ -610,6 +663,7 @@ class Transcript:
                     introns.append(Interval(exon.getEnd(),lastExonEnd))
             lastExonEnd=exon.getEnd() if strand=="+" else exon.getBegin()
         return introns
+
     def getSuccessor(self,targetExon):
         exons=self.exons
         numExons=len(exons)
@@ -617,22 +671,29 @@ class Transcript:
             exon=exons[i]
             if(exon is targetExon): return exons[i+1]
         return None
+
     def setStopCodons(self,stopCodons):
         self.stopCodons=stopCodons
+
     def isPartial(self):
         exons=self.exons
         numExons=len(exons)
         if(numExons==1): return exons[0].getType()!="single-exon"
         return exons[0].getType()!="initial-exon" or \
                exons[numExons-1].getType()!="final-exon"
+
     def getGene(self):
         return self.gene
+
     def setGene(self,g):
         self.gene=g
+
     def setBegin(self,x):
         self.begin=x
+
     def setEnd(self,x):
         self.end=x
+
     def mapToGenome(self,transcriptCoord):
         original=transcriptCoord
         numExons=self.numExons()
@@ -647,6 +708,7 @@ class Transcript:
         id=self.getID()
         raise Exception("coordinate is beyond transcript end: "+original+
                         " ("+id+")")
+
     def mapToTranscript(self,genomicCoord):
         exons=self.getRawExons()
         numExons=len(exons)
@@ -660,17 +722,21 @@ class Transcript:
             exonLen=exon.getLength()
             transcriptCoord+=exonLen
         return -1
+
     def  getExonContaining(self,genomicCoord):
         numExons=self.numExons()
         for i in range(numExons):
             exon=self.getIthExon(i)
             if(exon.containsCoordinate(genomicCoord)): return exon
+
     def copy(self):
         return copy.deepcopy(self)
+
     def setStrand(self,strand):
         self.strand=strand
         exons=self.exons
         for exon in exons: exon.setStrand(strand)
+
     def getRawExons(self):
         rawExons=self.rawExons
         if(not rawExons or len(rawExons)==0):
@@ -700,12 +766,15 @@ class Transcript:
                     n-=1
                     i-=1
             i+=1
+
         # Sort into transcription order
         strand=self.getStrand()
         rawExons.sort(key=lambda exon: exon.begin,reverse=strand=="-")
         return rawExons
+
     def numUTR(self):
         return len(self.UTR)
+
     def parseExtraFields(self):
         pairs=[]
         string=self.extraFields
@@ -719,20 +788,24 @@ class Transcript:
             if(match): value=match.group(1)
             pairs.append([key,value])
         return pairs
+
     def setExtraFieldsFromKeyValuePairs(self,array):
         string=""
         for pair in array:
             (key,value)=pair
             string+=key+"="+value+";"
         self.setExtraFields(string)
+
     def setExtraFields(self,string):
         self.extraFields=string
+
     def hashExtraFields(self,pairs):
         hash={}
         for pair in pairs:
             (key,value)=pair
             hash[key]=value
         return hash
+
     def parseRawExons(self):
         rawExons=self.rawExons
         numRaw=len(rawExons) if rawExons else 0
@@ -820,6 +893,7 @@ class Transcript:
                         seen.add(key)
                         UTR.append(newExon)
         self.UTR=UTR
+
     def getCDSbeginEnd(self):
         CDS=self.exons
         numCDS=len(CDS)
@@ -833,6 +907,7 @@ class Transcript:
             begin=CDS[numCDS-1].getBegin()
             end=CDS[0].getEnd()
             return (begin,end)
+
     def becomeNoncoding(self):
         exons=self.exons
         UTR=self.UTR

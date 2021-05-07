@@ -31,6 +31,7 @@ from builtins import (bytes, dict, int, list, object, range, str, ascii,
 import sys
 import ProgramName
 from StanParser import StanParser
+
 #=========================================================================
 # main()
 #=========================================================================
@@ -38,6 +39,7 @@ if(len(sys.argv)<3):
     exit(ProgramName.get()+" <infile.txt> <var1> <var2> ...\n")
 infile=sys.argv[1]
 variables=sys.argv[2:]
+
 parser=StanParser(infile)
 #(median,mean,SD,min,max)=parser.getSummary(variable)
 #print("# posterior median=",median,sep="")
@@ -51,3 +53,6 @@ for i in range(n):
     line=[]
     for sample in samplesByVar: line.append(str(sample[i]))
     print("\t".join(line))
+         
+
+

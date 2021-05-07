@@ -25,6 +25,7 @@ from __future__ import (absolute_import, division, print_function,
 from builtins import (bytes, dict, int, list, object, range, str, ascii, 
    chr, hex, input, next, oct, open, pow, round, super, filter, map, zip)
 import re
+
 ######################################################################
 # Attributes:
 #   hash
@@ -35,6 +36,7 @@ import re
 # Private methods:
 #   self.load(filename)
 ######################################################################
+
 class ConfigFile:
     """ConfigFile stores variable assignments as key-value pairs
     in a hash
@@ -42,12 +44,15 @@ class ConfigFile:
     def __init__(self,filename):
         self.hash={}
         self.load(filename)
+
     def lookup(self,key):
         return self.hash[key]
+
     def lookupOrDie(self,key):
         if(self.hash[key] is None):
             raise Exception("$key not defined in config file\n")
         return self.hash[key]
+
     def load(self,filename):
         hash=self.hash
         with open(filename,"r") as fh:
@@ -61,3 +66,4 @@ class ConfigFile:
                     key=match.group(1)
                     value=match.group(2)
                     hash[key]=value
+                    

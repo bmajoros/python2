@@ -2,12 +2,14 @@
 import sys
 import os
 import gzip
+
 if(len(sys.argv)!=4):
    print(sys.argv[0]+" <in.vcf.gz> <begin> <end>")
    sys.exit(0)
 [infile,begin,end]=sys.argv[1:]
 begin=int(begin)
 end=int(end)
+
 f=gzip.open(infile)
 for line in f:
    line.rstrip("\n")
@@ -20,3 +22,5 @@ for line in f:
       [chr,pos,id,ref,alt]=fields[:5]
       pos=int(pos)
       if pos>=begin and pos<=end: print(line)
+
+
